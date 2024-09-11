@@ -6,7 +6,7 @@ const formSchema = new mongoose.Schema({
   emailAddress: { type: String, required: true },
   message: { type: String, required: true },
   course: { type: String, required: true },
-  date: { type: String, required: true }
-});
+  timeSlot: { type: String, required: true }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Form', formSchema);
