@@ -58,7 +58,7 @@ const send = async (fullName, emailAddress, mobileNumber, location, message) => 
           Full Name: ${fullName}
           Email Address: ${emailAddress}
           Mobile Number: ${mobileNumber}
-          Course: ${location}
+          Location: ${location}
           Message: ${message}`
       };
   
