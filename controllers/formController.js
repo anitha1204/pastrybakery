@@ -4,10 +4,10 @@ const nodemailer = require('nodemailer');
 // Submit form handler
 exports.submitForm = async (req, res) => {
   try {
-    const { fullName, mobileNumber, emailAddress, message, course, timeSlot } = req.body;
+    const { fullName, emailAddress, mobileNumber, location, message, date} = req.body;
 
     // Validate that all required fields are present in the request
-    if (!fullName || !mobileNumber || !emailAddress || !message || !course || !timeSlot) {
+    if (!fullName || !mobileNumber || !emailAddress || !message || !location || !date) {
       return res.status(400).json({
         message: 'Validation Error: All fields are required.',
         error: 'One or more required fields are missing.'
@@ -19,7 +19,7 @@ exports.submitForm = async (req, res) => {
     await newForm.save();
 
     // Send email
-    await send(fullName, emailAddress, mobileNumber, course, message, timeSlot);
+    await send(fullName, emailAddress, mobileNumber, location, message, date);
 
     res.status(201).json({ message: 'Form submitted successfully', form: newForm });
   } catch (error) {
@@ -38,9 +38,9 @@ exports.getForms = async (req, res) => {
 };
 
 // Function to send email
-const send = async (fullName, emailAddress, mobileNumber, course, message, timeSlot) => {
+const send = async (fullName, emailAddress, mobileNumber, location, message, date) => {
     try {
-      console.log("data", fullName, emailAddress, mobileNumber, course, message, timeSlot);
+      console.log("data", fullName, emailAddress, mobileNumber, location, message, date);
   
       const transporter = nodemailer.createTransport({
         service: 'gmail',
