@@ -45,14 +45,14 @@ const send = async (fullName, emailAddress, mobileNumber, location, message) => 
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'selvam12042003@gmail.com',
-          pass: 'jxjj csdq qked wrku', // Replace with your app password
+          user: 'Deepalisacademy@gmail.com',
+          pass: 'irwq xzwt kkfq qntq', // Replace with your app password
         },
       });
   
       const mailOptions = {
-        from: 'selvam12042003@gmail.com',
-        to: [emailAddress, 'anithas12042003@gmail.com'],
+        from: 'Deepalisacademy@gmail.com',
+        to: [emailAddress],
         subject: 'Form Submission Confirmation',
         text: `
           Full Name: ${fullName}
