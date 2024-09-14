@@ -118,8 +118,8 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'selvam12042003@gmail.com',
-      pass: 'jxjj csdq qked wrku', // Make sure this is the correct app password
+      user: 'Deepalisacademy@gmail.com',
+      pass: 'irwq xzwt kkfq qntq', // Make sure this is the correct app password
     },
   });
 };
@@ -132,7 +132,7 @@ const sendConfirmationEmail = async (fullName, emailAddress, mobileNumber, locat
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: 'selvam12042003@gmail.com',
+      from: 'Deepalisacademy@gmail.com',
       to: emailAddress, // Send to the user's email address
       subject: 'Thank you for your form submission',
       text: `
@@ -159,8 +159,8 @@ const sendNotificationEmail = async (fullName, emailAddress, mobileNumber, locat
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: 'selvam12042003@gmail.com',
-      to: 'selvam12042003@gmail.com', // The predefined email address
+      from: 'Deepalisacademy@gmail.com',
+      to: 'Deepalisacademy@gmail.com', // The predefined email address
       subject: 'New Form Submission',
       text: `
               Full Name: ${fullName}
