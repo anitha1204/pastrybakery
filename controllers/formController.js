@@ -1,43 +1,43 @@
-const Form = require('../model/Form'); // Adjust the path if necessary
-const nodemailer = require('nodemailer');
+// const Form = require('../model/Form'); // Adjust the path if necessary
+// const nodemailer = require('nodemailer');
 
-// Submit form handler
-exports.submitForm = async (req, res) => {
-  try {
-    const { fullName, emailAddress, mobileNumber, location, message} = req.body;
+// // Submit form handler
+// exports.submitForm = async (req, res) => {
+//   try {
+//     const { fullName, emailAddress, mobileNumber, location, message} = req.body;
 
-    // Validate that all required fields are present in the request
-    if (!fullName || !mobileNumber || !emailAddress || !message || !location ) {
-      return res.status(400).json({
-        message: 'Validation Error: All fields are required.',
-        error: 'One or more required fields are missing.'
-      });
-    }
+//     // Validate that all required fields are present in the request
+//     if (!fullName || !mobileNumber || !emailAddress || !message || !location ) {
+//       return res.status(400).json({
+//         message: 'Validation Error: All fields are required.',
+//         error: 'One or more required fields are missing.'
+//       });
+//     }
 
-    // Create and save the new form entry
-    const newForm = new Form(req.body);
-    await newForm.save();
+//     // Create and save the new form entry
+//     const newForm = new Form(req.body);
+//     await newForm.save();
 
-    // Send email
-    await send(fullName, emailAddress, mobileNumber, location, message);
+//     // Send email
+//     await send(fullName, emailAddress, mobileNumber, location, message);
 
-    res.status(201).json({ message: 'Form submitted successfully', form: newForm });
-  } catch (error) {
-    res.status(400).json({ message: 'Error submitting form', error: error.message });
-  }
-};
+//     res.status(201).json({ message: 'Form submitted successfully', form: newForm });
+//   } catch (error) {
+//     res.status(400).json({ message: 'Error submitting form', error: error.message });
+//   }
+// };
 
-// Get all forms
-exports.getForms = async (req, res) => {
-  try {
-    const forms = await Form.find();
-    res.status(200).json(forms);
-  } catch (error) {
-    res.status(400).json({ message: 'Error fetching forms', error: error.message });
-  }
-};
+// // Get all forms
+// exports.getForms = async (req, res) => {
+//   try {
+//     const forms = await Form.find();
+//     res.status(200).json(forms);
+//   } catch (error) {
+//     res.status(400).json({ message: 'Error fetching forms', error: error.message });
+//   }
+// };
 
-// Function to send email
+// // Function to send email
 // const send = async (fullName, emailAddress, mobileNumber, location, message) => {
 //     try {
 //       console.log("data", fullName, emailAddress, mobileNumber, location, message);
@@ -71,9 +71,49 @@ exports.getForms = async (req, res) => {
 
 
 
-const send = async (fullName, emailAddress, mobileNumber, location, message) => {
+const Form = require('../model/Form'); // Adjust the path if necessary
+const nodemailer = require('nodemailer');
+
+// Submit form handler
+exports.submitForm = async (req, res) => {
   try {
-    console.log("data", fullName, emailAddress, mobileNumber, location, message);
+    const { fullName, emailAddress, mobileNumber, location, message } = req.body;
+
+    // Validate that all required fields are present in the request
+    if (!fullName || !mobileNumber || !emailAddress || !message || !location) {
+      return res.status(400).json({
+        message: 'Validation Error: All fields are required.',
+        error: 'One or more required fields are missing.',
+      });
+    }
+
+    // Create and save the new form entry
+    const newForm = new Form(req.body);
+    await newForm.save();
+
+    // Send email
+    await sendEmail(fullName, emailAddress, mobileNumber, location, message);
+
+    res.status(201).json({ message: 'Form submitted successfully', form: newForm });
+  } catch (error) {
+    res.status(500).json({ message: 'Error submitting form', error: error.message });
+  }
+};
+
+// Get all forms handler
+exports.getForms = async (req, res) => {
+  try {
+    const forms = await Form.find();
+    res.status(200).json(forms);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching forms', error: error.message });
+  }
+};
+
+// Function to send emails to both the user and academy email
+const sendEmail = async (fullName, emailAddress, mobileNumber, location, message) => {
+  try {
+    console.log("Sending emails with data:", fullName, emailAddress, mobileNumber, location, message);
 
     // Configure the nodemailer transporter
     const transporter = nodemailer.createTransport({
@@ -87,17 +127,17 @@ const send = async (fullName, emailAddress, mobileNumber, location, message) => 
     // Email 1: Confirmation to the user
     const userMailOptions = {
       from: 'Deepalisacademy@gmail.com',
-      to: emailAddress,  // Sending to user's email
+      to: emailAddress,  // Sending to the user's email
       subject: 'Thank You for Submitting the Form',
       text: `Dear ${fullName},\n\nThank you for submitting the form. We have received your details and will get back to you shortly.\n\nBest regards,\nDeepali's Academy`
     };
 
-    // Email 2: Detailed email to Deepalisacademy@gmail.com
+    // Email 2: Detailed form submission to the academy email
     const academyMailOptions = {
       from: 'Deepalisacademy@gmail.com',
       to: 'Deepalisacademy@gmail.com',  // Sending to your academy email
       subject: 'New Form Submission',
-      text: `Form Details:\n\n
+      text: `New form submission details:\n\n
       Full Name: ${fullName}\n
       Email Address: ${emailAddress}\n
       Mobile Number: ${mobileNumber}\n
@@ -111,7 +151,7 @@ const send = async (fullName, emailAddress, mobileNumber, location, message) => 
 
     console.log("Emails sent successfully");
   } catch (error) {
-    console.error("Error sending email:", error.message);
+    console.error("Error sending emails:", error.message);
+    throw new Error("Email sending failed");
   }
 };
-
